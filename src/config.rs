@@ -9,6 +9,8 @@ pub struct Config {
     pub default: DefaultSection,
     #[serde(default)]
     pub profile: HashMap<String, Profile>,
+    #[serde(default)]
+    pub server: HashMap<String, Server>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -30,6 +32,15 @@ impl Default for DefaultSection {
 pub struct Profile {
     pub base_url: Option<String>,
     pub token: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+pub struct Server {
+    pub host: String,
+    pub user: Option<String>,
+    pub port: Option<u16>,
+    pub key: Option<String>,
+    pub ssl_dir: Option<String>,
 }
 
 pub fn config_path() -> PathBuf {

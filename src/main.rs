@@ -37,5 +37,7 @@ fn main() -> Result<()> {
         Commands::Scaffold(args) => commands::scaffold::run(args, &ctx),
         Commands::Config(args) => commands::config::run(args, &ctx),
         Commands::Completions(args) => commands::completions::run(args, &ctx),
+        Commands::Server(args) => commands::server::run(args, &ctx),
+        Commands::Ssh(args) => commands::ssh::run(args, &ctx),
     }
 }

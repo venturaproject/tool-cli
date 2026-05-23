@@ -10,7 +10,7 @@ name = "tooler"
 path = "src/main.rs"
 
 [dependencies]
-clap = { version = "4", features = ["derive", "color"] }
+clap = { version = "4", features = ["derive", "color", "env"] }
 anyhow = "1"
 colored = "2"
 serde = { version = "1", features = ["derive"] }

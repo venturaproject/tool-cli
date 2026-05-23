@@ -2,7 +2,7 @@ use crate::{
     commands::{
         check::CheckArgs, completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs,
         env::EnvArgs, git::GitArgs, http::HttpArgs, info::InfoArgs, json::JsonArgs, play::PlayArgs,
-        run::RunArgs, scaffold::ScaffoldArgs,
+        run::RunArgs, scaffold::ScaffoldArgs, server::ServerArgs, ssh::SshArgs,
     },
     output::OutputFormat,
 };
@@ -66,4 +66,10 @@ pub enum Commands {
 
     /// Generate shell completion scripts
     Completions(CompletionsArgs),
+
+    /// Manage server profiles (host, user, SSH key)
+    Server(ServerArgs),
+
+    /// SSH operations: check, exec, copy, ssl deploy
+    Ssh(SshArgs),
 }
