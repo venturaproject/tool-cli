@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 use crate::{
     commands::{
-        completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs, info::InfoArgs,
-        json::JsonArgs,
+        check::CheckArgs, completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs,
+        env::EnvArgs, http::HttpArgs, info::InfoArgs, json::JsonArgs,
     },
     output::OutputFormat,
 };
@@ -38,6 +38,15 @@ pub enum Commands {
 
     /// Pretty-print and query JSON
     Json(JsonArgs),
+
+    /// Manage .env files (show, diff, check, get)
+    Env(EnvArgs),
+
+    /// Make HTTP requests (GET, POST) with profile auth
+    Http(HttpArgs),
+
+    /// Health-check URLs and TCP ports
+    Check(CheckArgs),
 
     /// Manage tooler configuration
     Config(ConfigArgs),

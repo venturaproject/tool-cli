@@ -1,5 +1,8 @@
+pub mod check;
 pub mod completions;
 pub mod config;
 pub mod echo;
+pub mod env;
+pub mod http;
 pub mod info;
 pub mod json;

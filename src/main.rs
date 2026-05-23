@@ -27,6 +27,9 @@ fn main() -> Result<()> {
         Commands::Info(args)        => commands::info::run(args, &ctx),
         Commands::Echo(args)        => commands::echo::run(args, &ctx),
         Commands::Json(args)        => commands::json::run(args, &ctx),
+        Commands::Env(args)         => commands::env::run(args, &ctx),
+        Commands::Http(args)        => commands::http::run(args, &ctx),
+        Commands::Check(args)       => commands::check::run(args, &ctx),
         Commands::Config(args)      => commands::config::run(args, &ctx),
         Commands::Completions(args) => commands::completions::run(args, &ctx),
     }

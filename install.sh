@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-REPO="venturaproject/tool-cli"
+REPO="venturaproject/tooler"
 BIN_NAME="tooler"
 INSTALL_DIR="/usr/local/bin"
 
