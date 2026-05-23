@@ -9,7 +9,7 @@ A modular CLI toolkit built with Rust. Designed as a boilerplate — add your ow
 Downloads a prebuilt binary for your OS and architecture:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/antonioventura/tooler/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/venturaproject/tool-cli/main/install.sh | sh
 ```
 
 Supports: macOS (Intel + Apple Silicon), Linux (x86_64 + arm64).
@@ -17,7 +17,7 @@ Supports: macOS (Intel + Apple Silicon), Linux (x86_64 + arm64).
 To install a specific version:
 
 ```sh
-TOOLER_VERSION=v1.0.0 curl -fsSL https://raw.githubusercontent.com/antonioventura/tooler/main/install.sh | sh
+TOOLER_VERSION=v1.0.0 curl -fsSL https://raw.githubusercontent.com/venturaproject/tool-cli/main/install.sh | sh
 ```
 
 ### Option 2 — cargo (requires Rust)
@@ -25,13 +25,13 @@ TOOLER_VERSION=v1.0.0 curl -fsSL https://raw.githubusercontent.com/antonioventur
 If you already have Rust installed:
 
 ```sh
-cargo install --git https://github.com/antonioventura/tooler
+cargo install --git https://github.com/venturaproject/tool-cli
 ```
 
 Or from a local clone:
 
 ```sh
-git clone https://github.com/antonioventura/tooler
+git clone https://github.com/venturaproject/tool-cli
 cd tooler
 cargo install --path .
 ```
