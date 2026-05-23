@@ -54,11 +54,11 @@ pub fn run(args: JsonArgs, _ctx: &Context) -> Result<()> {
 fn colorize_json(json: &str) -> String {
     json.lines()
         .map(|line| {
-            if line.trim_start().starts_with('"') && line.contains(':') {
-                if let Some(pos) = line.find(':') {
-                    let (key, rest) = line.split_at(pos);
-                    return format!("{}{}", key.cyan(), rest);
-                }
+            if line.trim_start().starts_with('"') && line.contains(':')
+                && let Some(pos) = line.find(':')
+            {
+                let (key, rest) = line.split_at(pos);
+                return format!("{}{}", key.cyan(), rest);
             }
             if matches!(line.trim(), "{" | "}" | "[" | "]" | "{}," | "}," | "],") {
                 return line.dimmed().to_string();

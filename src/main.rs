@@ -15,7 +15,7 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
     let cfg = config::load()?;
 
-    let output = cli.output.unwrap_or_else(|| match cfg.default.output.as_str() {
+    let output = cli.output.unwrap_or(match cfg.default.output.as_str() {
         "json"  => OutputFormat::Json,
         "table" => OutputFormat::Table,
         _       => OutputFormat::Plain,
