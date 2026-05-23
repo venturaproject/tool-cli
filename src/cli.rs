@@ -3,7 +3,7 @@ use crate::{
     commands::{
         check::CheckArgs, completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs,
         env::EnvArgs, git::GitArgs, http::HttpArgs, info::InfoArgs, json::JsonArgs,
-        run::RunArgs, scaffold::ScaffoldArgs,
+        play::PlayArgs, run::RunArgs, scaffold::ScaffoldArgs,
     },
     output::OutputFormat,
 };
@@ -54,6 +54,9 @@ pub enum Commands {
 
     /// Run a script defined in .tooler.toml
     Run(RunArgs),
+
+    /// Run a YAML playbook (tasks, vars, health checks)
+    Play(PlayArgs),
 
     /// Git utilities: summary, clean branches, changelog
     Git(GitArgs),
