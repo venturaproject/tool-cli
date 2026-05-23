@@ -3,6 +3,7 @@ use clap::Args;
 use colored::Colorize;
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 use crate::context::Context;
 
@@ -86,7 +87,15 @@ pub fn run(args: PlayArgs, _ctx: &Context) -> Result<()> {
     let file = args.file.as_deref()
         .ok_or_else(|| anyhow::anyhow!("Specify a playbook file, or use --init to generate one."))?;
 
-    let content = std::fs::read_to_string(file)
+    let file_path = PathBuf::from(file);
+    let playbook_dir = file_path
+        .canonicalize()
+        .with_context(|| format!("Cannot resolve path: {file}"))?
+        .parent()
+        .unwrap_or(Path::new("."))
+        .to_path_buf();
+
+    let content = std::fs::read_to_string(&file_path)
         .with_context(|| format!("Cannot read playbook: {file}"))?;
 
     let mut playbook: Playbook = serde_yaml::from_str(&content)
@@ -104,19 +113,20 @@ pub fn run(args: PlayArgs, _ctx: &Context) -> Result<()> {
     let tag_filter: Option<Vec<&str>> = args.tags.as_deref()
         .map(|t| t.split(',').map(str::trim).collect());
 
-    execute_playbook(&playbook, &tag_filter, args.dry)
+    execute_playbook(&playbook, &playbook_dir, &tag_filter, args.dry)
 }
 
 // ── Runner ────────────────────────────────────────────────────────────────────
 
 fn execute_playbook(
     playbook: &Playbook,
+    playbook_dir: &Path,
     tag_filter: &Option<Vec<&str>>,
     dry: bool,
 ) -> Result<()> {
     let sep = "─".repeat(56);
 
-    println!("\n{} {}", "PLAY".bold().cyan(), format!("[{}]", playbook.name).bold());
+    println!("\n{} {} {}", "PLAY".bold().cyan(), format!("[{}]", playbook.name).bold(), playbook_dir.display().to_string().dimmed());
     if let Some(desc) = &playbook.description {
         println!("     {}", desc.dimmed());
     }
@@ -137,7 +147,7 @@ fn execute_playbook(
     for (i, task) in tasks.iter().enumerate() {
         println!("\n{} [{}/{}] {}", "TASK".bold().yellow(), i + 1, total, task.name.bold());
 
-        let result = run_task(task, &playbook.vars, dry);
+        let result = run_task(task, &playbook.vars, playbook_dir, dry);
 
         match result {
             Ok(_) => {
@@ -157,7 +167,7 @@ fn execute_playbook(
                     failed += 1;
                     println!("\n{}", sep.dimmed());
                     println!(
-                        "\n{} failed at task [{}]. {}",
+                        "\n{} failed at task \"{}\". {}",
                         "PLAY".bold().red(),
                         task.name.bold(),
                         "Remaining tasks skipped.".dimmed()
@@ -174,7 +184,7 @@ fn execute_playbook(
     Ok(())
 }
 
-fn run_task(task: &Task, vars: &HashMap<String, String>, dry: bool) -> Result<()> {
+fn run_task(task: &Task, vars: &HashMap<String, String>, playbook_dir: &Path, dry: bool) -> Result<()> {
     if let Some(cmd) = &task.run {
         let cmd = render(cmd, vars);
         println!("  {} {}", "$".bold().green(), cmd.dimmed());
@@ -183,6 +193,7 @@ fn run_task(task: &Task, vars: &HashMap<String, String>, dry: bool) -> Result<()
             let status = std::process::Command::new("sh")
                 .arg("-c")
                 .arg(&cmd)
+                .current_dir(playbook_dir)
                 .status()?;
             let elapsed = start.elapsed();
             if status.success() {
@@ -213,11 +224,11 @@ fn run_task(task: &Task, vars: &HashMap<String, String>, dry: bool) -> Result<()
     }
 
     if let Some(spec) = &task.env_check {
-        let reference = render(&spec.reference, vars);
-        let target = render(&spec.target, vars);
-        println!("  {} {} → {}", "→".bold(), reference.dimmed(), target.dimmed());
+        let reference = playbook_dir.join(render(&spec.reference, vars));
+        let target = playbook_dir.join(render(&spec.target, vars));
+        println!("  {} {} → {}", "→".bold(), reference.display().to_string().dimmed(), target.display().to_string().dimmed());
         if !dry {
-            env_check(&reference, &target)?;
+            env_check(&reference.to_string_lossy(), &target.to_string_lossy())?;
         }
         return Ok(());
     }
