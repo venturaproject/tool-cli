@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 use crate::{
     commands::{
         check::CheckArgs, completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs,
-        env::EnvArgs, http::HttpArgs, info::InfoArgs, json::JsonArgs,
+        env::EnvArgs, http::HttpArgs, info::InfoArgs, json::JsonArgs, run::RunArgs,
     },
     output::OutputFormat,
 };
@@ -50,6 +50,9 @@ pub enum Commands {
 
     /// Manage tooler configuration
     Config(ConfigArgs),
+
+    /// Run a script defined in .tooler.toml
+    Run(RunArgs),
 
     /// Generate shell completion scripts
     Completions(CompletionsArgs),

@@ -1,0 +1,7 @@
+[scripts]
+build   = "cargo build --release"
+check   = "cargo clippy -- -D warnings"
+fmt     = "cargo fmt"
+test    = "cargo test"
+install = "cargo install --path ."
+ci      = "cargo fmt --check && cargo clippy -- -D warnings && cargo test"

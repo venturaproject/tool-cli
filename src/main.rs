@@ -4,6 +4,7 @@ mod config;
 mod context;
 mod error;
 mod output;
+mod project;
 
 use anyhow::Result;
 use clap::Parser;
@@ -30,6 +31,7 @@ fn main() -> Result<()> {
         Commands::Env(args)         => commands::env::run(args, &ctx),
         Commands::Http(args)        => commands::http::run(args, &ctx),
         Commands::Check(args)       => commands::check::run(args, &ctx),
+        Commands::Run(args)         => commands::run::run(args, &ctx),
         Commands::Config(args)      => commands::config::run(args, &ctx),
         Commands::Completions(args) => commands::completions::run(args, &ctx),
     }
