@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::Args;
 use colored::Colorize;
+use crate::context::Context;
 
 #[derive(Args)]
 pub struct EchoArgs {
@@ -20,7 +21,7 @@ pub struct EchoArgs {
     pub repeat: u32,
 }
 
-pub fn run(args: EchoArgs) -> Result<()> {
+pub fn run(args: EchoArgs, _ctx: &Context) -> Result<()> {
     let text = args.text.join(" ");
     let text = if args.upper { text.to_uppercase() } else { text };
 

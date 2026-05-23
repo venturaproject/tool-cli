@@ -1,5 +1,11 @@
 use clap::{Parser, Subcommand};
-use crate::commands::{info::InfoArgs, echo::EchoArgs, json::JsonArgs};
+use crate::{
+    commands::{
+        completions::CompletionsArgs, config::ConfigArgs, echo::EchoArgs, info::InfoArgs,
+        json::JsonArgs,
+    },
+    output::OutputFormat,
+};
 
 #[derive(Parser)]
 #[command(
@@ -12,6 +18,14 @@ use crate::commands::{info::InfoArgs, echo::EchoArgs, json::JsonArgs};
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+
+    /// Output format (overrides config default)
+    #[arg(long, global = true, value_enum)]
+    pub output: Option<OutputFormat>,
+
+    /// Profile to use from config
+    #[arg(long, global = true, default_value = "default")]
+    pub profile: String,
 }
 
 #[derive(Subcommand)]
@@ -24,4 +38,10 @@ pub enum Commands {
 
     /// Pretty-print and query JSON
     Json(JsonArgs),
+
+    /// Manage tooler configuration
+    Config(ConfigArgs),
+
+    /// Generate shell completion scripts
+    Completions(CompletionsArgs),
 }
